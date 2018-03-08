@@ -19,7 +19,55 @@
 		<author email="dev@commons.apache.org">Apache Commons Developers</author>
 	</properties>
 	<body>
-        <release version="2.1" date="unreleased">
+        <release version="3.0" date="unreleased">
+            <action dev="tv" type="remove">
+                Remove dependency on velocity-tools
+            </action>
+            <action dev="tv" type="remove">
+                Remove deprecated code
+            </action>
+            <action issue="JCS-181" dev="tv" type="update">
+                Update dependency to httpclient 4.5.3
+            </action>
+            <action dev="tv" type="update">
+                Update dependency commons-dbcp2
+            </action>
+            <action dev="tv" type="update">
+                Finally require Java 8
+            </action>
+        </release>
+        <release version="2.2" date="2017-08-02">
+            <action issue="JCS-180" dev="rmannibucau" type="fix">
+                CacheInvocationContextImpl NPE if method doesnt have any argument
+            </action>
+            <action issue="JCS-179" dev="tv" type="fix" due-to="Archer">
+                RemoteCacheServerFactory not able to start server 
+            </action>
+            <action issue="JCS-178" dev="tv" type="fix">
+                Clients using RemoteCache are not working. Add a test. 
+            </action>
+            <action dev="tv" type="add">
+                Add a shutdown() method to JCS
+            </action>
+            <action issue="JCS-177" dev="tv" type="fix" due-to="Ryan Fong">
+                Fix: CompositeCacheManager leaks memory if CacheAccess.dipose is called
+            </action>
+        </release>
+        <release version="2.1" date="2017-02-05">
+            <action dev="tv" type="fix">
+                SoftReference cache did not work because of strong references being 
+                stored in payload of DoubleLinkedListNode
+            </action>
+            <action issue="JCS-172" dev="tv" type="fix" due-to="Tom Schroeder">
+                ElementAttributes.clone() not updating createTime causes cache elements
+                to expire immediately 
+            </action>
+            <action issue="JCS-171" dev="tv" type="fix" due-to="Wiktor Niesiobedzki">
+                Multiple CacheEventQueue.QProcessor spawned for the same cache region 
+            </action>
+            <action issue="JCS-170" dev="rmannibucau" type="fix">
+                Replace at least commas for jmx registration
+            </action>
         </release>
         <release version="2.0" date="2016-12-25" description="JDK 1.6 based major release">
             <action issue="JCS-119" dev="tv" type="update">

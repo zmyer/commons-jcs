@@ -29,6 +29,7 @@ import java.rmi.server.Unreferenced;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Properties;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
@@ -71,6 +72,8 @@ public class RemoteCacheServer<K, V>
     extends UnicastRemoteObject
     implements IRemoteCacheServer<K, V>, Unreferenced
 {
+    public static final String DFEAULT_REMOTE_CONFIGURATION_FILE = "/remote.cache.ccf";
+
     /** For serialization. Don't change. */
     private static final long serialVersionUID = -8072345435941473116L;
 
@@ -121,42 +124,44 @@ public class RemoteCacheServer<K, V>
 
     /**
      * Constructor for the RemoteCacheServer object. This initializes the server with the values
-     * from the config file.
+     * from the properties object.
      * <p>
      * @param rcsa
+     * @param config cache hub configuration
      * @throws RemoteException
      */
-    protected RemoteCacheServer( IRemoteCacheServerAttributes rcsa )
+    protected RemoteCacheServer( IRemoteCacheServerAttributes rcsa, Properties config )
         throws RemoteException
     {
         super( rcsa.getServicePort() );
         this.remoteCacheServerAttributes = rcsa;
-        init( rcsa.getConfigFileName() );
+        init( config );
     }
 
     /**
      * Constructor for the RemoteCacheServer object. This initializes the server with the values
-     * from the config file.
+     * from the properties object.
      * <p>
      * @param rcsa
+     * @param config cache hub configuration
      * @param customRMISocketFactory
      * @throws RemoteException
      */
-    protected RemoteCacheServer( IRemoteCacheServerAttributes rcsa, RMISocketFactory customRMISocketFactory )
+    protected RemoteCacheServer( IRemoteCacheServerAttributes rcsa, Properties config, RMISocketFactory customRMISocketFactory )
         throws RemoteException
     {
         super( rcsa.getServicePort(), customRMISocketFactory, customRMISocketFactory );
         this.remoteCacheServerAttributes = rcsa;
-        init( rcsa.getConfigFileName() );
+        init( config );
     }
 
     /**
-     * Initialize the RMI Cache Server from a properties file.
+     * Initialize the RMI Cache Server from a properties object.
      * <p>
-     * @param prop
+     * @param prop the configuration properties
      * @throws RemoteException if the configuration of the cache manager instance fails
      */
-    private void init( String prop ) throws RemoteException
+    private void init( Properties prop ) throws RemoteException
     {
         try
         {
@@ -181,23 +186,15 @@ public class RemoteCacheServer<K, V>
     /**
      * Subclass can override this method to create the specific cache manager.
      * <p>
-     * @param prop The name of the configuration file.
-     * @return The cache hub configured with this configuration file.
+     * @param prop the configuration object.
+     * @return The cache hub configured with this configuration.
      *
      * @throws CacheException if the configuration cannot be loaded
      */
-    private CompositeCacheManager createCacheManager( String prop ) throws CacheException
+    private CompositeCacheManager createCacheManager( Properties prop ) throws CacheException
     {
         CompositeCacheManager hub = CompositeCacheManager.getUnconfiguredInstance();
-
-        if ( prop == null )
-        {
-            hub.configure( "/remote.cache.ccf" );
-        }
-        else
-        {
-            hub.configure( prop );
-        }
+        hub.configure( prop );
         return hub;
     }
 

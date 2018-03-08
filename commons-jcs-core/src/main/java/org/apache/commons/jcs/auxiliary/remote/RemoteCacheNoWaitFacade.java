@@ -21,10 +21,9 @@ package org.apache.commons.jcs.auxiliary.remote;
 
 import java.util.List;
 
+import org.apache.commons.jcs.auxiliary.remote.behavior.IRemoteCacheAttributes;
 import org.apache.commons.jcs.auxiliary.remote.server.behavior.RemoteType;
 import org.apache.commons.jcs.engine.CacheStatus;
-import org.apache.commons.jcs.engine.behavior.ICache;
-import org.apache.commons.jcs.engine.behavior.ICompositeCacheManager;
 import org.apache.commons.jcs.engine.behavior.IElementSerializer;
 import org.apache.commons.jcs.engine.logging.behavior.ICacheEventLogger;
 import org.apache.commons.logging.Log;
@@ -52,26 +51,18 @@ public class RemoteCacheNoWaitFacade<K, V>
      * <p>
      * @param noWaits
      * @param rca
-     * @param cacheMgr
      * @param cacheEventLogger
      * @param elementSerializer
      * @param cacheFactory
      */
-    public RemoteCacheNoWaitFacade( List<ICache<K, V>> noWaits,
-                                    RemoteCacheAttributes rca,
-                                    ICompositeCacheManager cacheMgr,
+    public RemoteCacheNoWaitFacade( List<RemoteCacheNoWait<K,V>> noWaits,
+                                    IRemoteCacheAttributes rca,
                                     ICacheEventLogger cacheEventLogger,
                                     IElementSerializer elementSerializer,
                                     RemoteCacheFactory cacheFactory)
     {
-        super( noWaits, rca, cacheMgr, cacheEventLogger, elementSerializer );
+        super( noWaits, rca, cacheEventLogger, elementSerializer );
         this.cacheFactory = cacheFactory;
-
-        for (RemoteCacheNoWait<K,V> rcnw : this.noWaits)
-        {
-            ((RemoteCache<K, V>)rcnw.getRemoteCache()).setFacade(this);
-            this.noWaits.add(rcnw);
-        }
     }
 
     /**
